@@ -43,6 +43,40 @@ if (getenv('VERCEL')) {
     }
 
     $_SERVER['LARAVEL_STORAGE_PATH'] = $storagePath;
+
+    $databaseUrl = (string) getenv('DB_URL');
+    $databaseHost = strtolower((string) getenv('DB_HOST'));
+    $databaseName = (string) getenv('DB_DATABASE');
+    $databaseUsername = (string) getenv('DB_USERNAME');
+    $databaseConnection = strtolower((string) getenv('DB_CONNECTION'));
+    $databaseIsLocal = in_array($databaseHost, ['', 'localhost', '127.0.0.1', '::1'], true);
+    $cloudDatabaseConfigured = ($databaseUrl !== '' && ! str_starts_with(strtolower($databaseUrl), 'sqlite:'))
+        || ($databaseConnection !== 'sqlite'
+            && ! $databaseIsLocal
+            && $databaseName !== ''
+            && $databaseUsername !== '');
+
+    $runtimeDefaults = [
+        'APP_ENV' => 'production',
+        'APP_DEBUG' => 'false',
+        'SESSION_DRIVER' => 'cookie',
+        'CACHE_STORE' => 'array',
+        'QUEUE_CONNECTION' => 'sync',
+        'LOG_CHANNEL' => 'stderr',
+    ];
+
+    foreach ($runtimeDefaults as $key => $value) {
+        $currentValue = getenv($key);
+        $needsFallback = in_array($key, ['SESSION_DRIVER', 'CACHE_STORE', 'QUEUE_CONNECTION'], true)
+            && ! $cloudDatabaseConfigured
+            && strtolower((string) $currentValue) === 'database';
+
+        if ($currentValue === false || $currentValue === '' || $needsFallback) {
+            putenv("{$key}={$value}");
+            $_ENV[$key] = $value;
+            $_SERVER[$key] = $value;
+        }
+    }
 }
 
 require __DIR__.'/../vendor/autoload.php';

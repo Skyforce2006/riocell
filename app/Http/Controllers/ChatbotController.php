@@ -46,8 +46,12 @@ class ChatbotController extends Controller
 
     private function getGeminiResponse($message, $sessionId)
     {
-        $apiKey = env('GEMINI_API_KEY', 'AIzaSyBaP10lv6EKWdkox7bELVm30jJmCUAiEYw');
-        $modelName = 'gemini-1.5-flash'; 
+        $apiKey = config('services.gemini.key');
+        $modelName = config('services.gemini.model');
+
+        if (! $apiKey) {
+            return $this->getTemplateResponse($message);
+        }
 
         try {
             $systemPrompt = $this->getSystemPrompt();
@@ -61,13 +65,12 @@ class ChatbotController extends Controller
             ];
 
             $url = "https://generativelanguage.googleapis.com/v1beta/models/{$modelName}:generateContent?key={$apiKey}";
-            $response = Http::withoutVerifying()
-                ->timeout(15)
+            $response = Http::timeout(15)
                 ->withHeaders(['Content-Type' => 'application/json'])
                 ->post($url, ['contents' => $contents]);
 
             if ($response->status() === 404) {
-                $modelsReq = Http::withoutVerifying()->get("https://generativelanguage.googleapis.com/v1beta/models?key={$apiKey}");
+                $modelsReq = Http::get("https://generativelanguage.googleapis.com/v1beta/models?key={$apiKey}");
                 if ($modelsReq->successful()) {
                     $availableModels = $modelsReq->json()['models'] ?? [];
                     foreach ($availableModels as $m) {
@@ -78,7 +81,7 @@ class ChatbotController extends Controller
                         }
                     }
                     $url = "https://generativelanguage.googleapis.com/v1beta/models/{$modelName}:generateContent?key={$apiKey}";
-                    $response = Http::withoutVerifying()->timeout(15)->post($url, ['contents' => $contents]);
+                    $response = Http::timeout(15)->post($url, ['contents' => $contents]);
                 }
             }
 
