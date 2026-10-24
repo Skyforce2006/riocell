@@ -46,7 +46,7 @@
         <div class="flex items-center space-x-6">
             <div class="shrink-0 relative group">
                 @if($user->avatar)
-                    <img class="h-20 w-20 object-cover rounded-full border-2 border-blue-500 shadow-md" src="{{ asset('storage/' . $user->avatar) }}" alt="Current profile photo" />
+                    <img class="h-20 w-20 object-cover rounded-full border-2 border-blue-500 shadow-md" src="{{ Storage::disk('public')->url($user->avatar) }}" alt="Current profile photo" />
                 @else
                     <div class="h-20 w-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center border-2 border-white dark:border-gray-800 shadow-md">
                         <span class="text-white text-3xl font-bold">{{ strtoupper(substr($user->name, 0, 1)) }}</span>

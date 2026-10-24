@@ -74,7 +74,7 @@
                             
                             <!-- BUNDARAN FOTO PROFIL (DESKTOP) -->
                             @if(Auth::user()->avatar)
-                                <img class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600 shadow-sm mr-2" src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}">
+                                <img class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600 shadow-sm mr-2" src="{{ Storage::disk('public')->url(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}">
                             @else
                                 <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-sm mr-2">
                                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
@@ -152,7 +152,7 @@
                 
                 <!-- BUNDARAN FOTO PROFIL (MOBILE) -->
                 @if(Auth::user()->avatar)
-                    <img class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md" src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}">
+                    <img class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md" src="{{ Storage::disk('public')->url(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}">
                 @else
                     <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-lg shadow-md">
                         {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}

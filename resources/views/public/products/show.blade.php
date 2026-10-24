@@ -48,7 +48,7 @@
                 
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 sm:p-8 flex items-center justify-center min-h-96 overflow-hidden">
                     @if($product->image)
-                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-contain max-h-96 hover:scale-105 transition duration-500">
+                        <img src="{{ Storage::disk('public')->url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-contain max-h-96 hover:scale-105 transition duration-500">
                     @else
                         <div class="text-center">
                             <div class="text-8xl mb-4">{{ $categoryLabels[$product->category] ? substr($categoryLabels[$product->category], 0, 1) : '📦' }}</div>
@@ -138,7 +138,7 @@
                             <a href="{{ route('products.show', $related) }}" class="group block bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-lg overflow-hidden transition transform hover:-translate-y-1">
                                 <div class="relative h-40 bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
                                     @if($related->image)
-                                        <img src="{{ asset('storage/' . $related->image) }}" alt="{{ $related->name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                        <img src="{{ Storage::disk('public')->url($related->image) }}" alt="{{ $related->name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
                                     @else
                                         <div class="text-5xl">📦</div>
                                     @endif

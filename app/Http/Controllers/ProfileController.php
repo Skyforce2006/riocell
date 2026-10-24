@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -45,14 +46,13 @@ class ProfileController extends Controller
 
         // 3. Proses UPLOAD GAMBAR jika pengguna memilih gambar baru
         if ($request->hasFile('avatar')) {
-            // Jika ada foto lama, boleh kita hapus dari penyimpanan (Opsional tapi bagus untuk hemat memori)
-            if ($user->avatar && file_exists(storage_path('app/public/' . $user->avatar))) {
-                unlink(storage_path('app/public/' . $user->avatar));
-            }
-
-            // Simpan gambar baru ke folder storage/app/public/avatars
+            $previousAvatar = $user->avatar;
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = $avatarPath; // Simpan path-nya ke database
+            $user->avatar = $avatarPath;
+
+            if ($previousAvatar) {
+                Storage::disk('public')->delete($previousAvatar);
+            }
         }
 
         // 4. Proses update keamanan email jika diganti

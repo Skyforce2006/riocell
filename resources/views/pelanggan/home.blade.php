@@ -16,7 +16,7 @@
                     </div>
                     
                     @if(Auth::user()->avatar)
-                        <img class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover shadow-lg border-2 border-white/50" src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}">
+                        <img class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover shadow-lg border-2 border-white/50" src="{{ Storage::disk('public')->url(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}">
                     @else
                         <div class="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 rounded-full flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg border-2 border-white/50">
                             {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
@@ -75,7 +75,7 @@
                             <div class="flex items-center min-w-0 flex-1">
                                 <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex-shrink-0 shadow-sm overflow-hidden bg-white dark:bg-gray-700 border border-gray-100 dark:border-gray-600 relative">
                                     @if($product->image)
-                                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                                        <img src="{{ Storage::disk('public')->url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                                     @else
                                         <div class="w-full h-full flex items-center justify-center bg-gradient-to-br 
                                             @if($product->category == 'pulsa') from-red-500 to-red-600

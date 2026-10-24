@@ -84,7 +84,7 @@
                         <a href="{{ route('products.show', $product) }}" class="group block bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-lg overflow-hidden transition transform hover:-translate-y-1">
                             <div class="relative h-48 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center overflow-hidden">
                                 @if($product->image)
-                                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                    <img src="{{ Storage::disk('public')->url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
                                 @else
                                     <div class="text-6xl">{{ $categoryLabels[$product->category] ? substr($categoryLabels[$product->category], 0, 1) : '📦' }}</div>
                                 @endif
